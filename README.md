@@ -22,14 +22,14 @@ git pull
 
 ## 1. Resumen de los contenidos de teoría
 
-Fichero ['Resumen Teoría VA.pdf'](): Resumen de teoría en formato PDF.
+Fichero ['Resumen Teoría VA.pdf'](https://docs.google.com/document/d/1hYNsSnOXKjE1kXjycNTTrv47CnXmMRywsS0rjo0Pqxc/edit?usp=sharing): Resumen de teoría en formato PDF.
 
 IMPORTANTE: Para hacer uso del índice interactivo que viene implementado en el resumen, debes descargar el documento en formato PDF.
 
 ## 2. Diapositivas utilizadas en clase
 
-Directorio ['Diapositivas Teoría'](): Dentro de este directorio se encuentran las diapositivas utilizadas en clase para abordar los contenidos teóricos de la asignatura.
+Directorio ['Diapositivas Teoría'](https://github.com/aleon2020/VA_2024-2025/tree/main/Diapositivas%20Teor%C3%ADa): Dentro de este directorio se encuentran las diapositivas utilizadas en clase para abordar los contenidos teóricos de la asignatura.
 
 ## 3. Prácticas
 
-Directorios ['Prácticas'](): Este directorio contiene cada una de las prácticas realizadas en la asignatura.
+Directorios ['Prácticas'](https://github.com/aleon2020/VA_2024-2025/tree/main/Pr%C3%A1cticas): Este directorio contiene cada una de las prácticas realizadas en la asignatura.
