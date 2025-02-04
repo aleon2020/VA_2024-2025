@@ -1,19 +1,17 @@
-/**
- * Color spaces example
- * @author José Miguel Guerrero
- */
-
 #include "opencv2/imgproc.hpp"
 #include "opencv2/highgui.hpp"
 #include <iostream>
 #include <math.h>
 
+// Igual que en el ejemplo anterior, pero usando el namespace
+// evitamos tener que utilizar elementos de OpenCV con cv:: y std::
 using namespace cv;
 using namespace std;
 
 int main(int argc, char ** argv)
 {
   // Load an image
+  // Lectura de la imagen
   Mat src = imread("../../data/RGB.jpg", IMREAD_COLOR);
   if (src.empty() ) {
     cout << "Could not open or find the image!\n" << endl;
@@ -43,11 +41,14 @@ int main(int argc, char ** argv)
   cv::hconcat(win_mat1_rgb, BGR_channels[2], win_mat2_rgb);
 
   // Show image
+  // Mostrar la imagen
   namedWindow("BGR Original", WINDOW_AUTOSIZE);
   imshow("BGR Original", src);
   cv::imshow("BGR Channels", win_mat2_rgb);
 
   // Changing original image to HSV using cvtColor
+  // Para realizar un cambio de espacio de color, se utiliza la
+  // función cvtColor(im_origen, im_destino, formato)
   Mat HSV_opencv;
   cvtColor(src, HSV_opencv, COLOR_BGR2HSV);
   imshow("HSV OpenCV", HSV_opencv);
