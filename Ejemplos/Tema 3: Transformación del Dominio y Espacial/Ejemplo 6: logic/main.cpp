@@ -1,8 +1,3 @@
-/**
- * Logic transformation - sample code
- * @author José Miguel Guerrero
- */
-
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgproc.hpp>
 
@@ -11,6 +6,10 @@ using namespace std;
 
 int main()
 {
+
+  // Para este ejemplo se crean dos imágenes de 400 x 400
+  // y se dibuja un círculo blanco en su interior
+
   // Create two input matrices filled with zeros
   Mat im1 = Mat::zeros(Size(400, 400), CV_8UC1);
   Mat im2 = Mat::zeros(Size(400, 400), CV_8UC1);
@@ -25,6 +24,10 @@ int main()
 
   // Output images
   Mat output1, output2;
+
+  // Se utiliza la función bitwise_and o bitwise_or las cuales reciben las
+  // dos imágenes a las que hay que aplicar la operación lógica y la imagen
+  // donde se almacenará el resultado
 
   // Compute the bitwise AND of input images and store them in the output1 image
   bitwise_and(im1, im2, output1);

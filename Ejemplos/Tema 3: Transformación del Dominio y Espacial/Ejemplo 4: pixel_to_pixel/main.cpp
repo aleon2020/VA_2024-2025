@@ -1,8 +1,3 @@
-/**
- * Pixel to pixel transformation - sample code
- * @author José Miguel Guerrero
- */
-
 #include "opencv2/imgproc.hpp"
 #include "opencv2/highgui.hpp"
 #include <iostream>
@@ -36,6 +31,10 @@ int main(int argc, char ** argv)
   Mat dst2(src.rows, src.cols, src.type());
   uint threshold_p = 150;
   // Read pixel values
+  // Se leen los píxeles uno a uno y se tratan de forma independiente:
+  // 1. Se aplica el inverso al valor del píxel
+  // 2. Se calcula el valor del píxel de forma binaria a partir de un
+  // umbral (p = 150)
   for (int i = 0; i < src.rows; i++) {
     for (int j = 0; j < src.cols; j++) {
       // You can now access the pixel value and calculate the new value
