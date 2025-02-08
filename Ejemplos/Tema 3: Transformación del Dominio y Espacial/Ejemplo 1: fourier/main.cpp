@@ -1,8 +1,3 @@
-/**
- * Discrete Fourier Transform - sample code
- * @author José Miguel Guerrero
- */
-
 #include "opencv2/core.hpp"
 #include "opencv2/imgproc.hpp"
 #include "opencv2/imgcodecs.hpp"
@@ -26,6 +21,7 @@ Mat computeDFT(const Mat & image)
 {
   // Expand the image to an optimal size - power-of-two.
   Mat padded;
+  // Este ajuste en el tamaño es para mejorar el rendimiento del algoritmo
   int m = getOptimalDFTSize(image.rows);
   int n = getOptimalDFTSize(image.cols);     // on the border add zero values
   copyMakeBorder(
@@ -38,12 +34,14 @@ Mat computeDFT(const Mat & image)
   Mat imaginaryPart = Mat::zeros(padded.size(), CV_32F);
 
   // Combine the real and imaginary parts into a single complex matrix
+  // El resultado de la Transformada de Fourier es complejo
   Mat planes[] = {realPart, imaginaryPart};
   Mat complexI;
   merge(planes, 2, complexI); // The resulting complex matrix has real and imaginary parts
 
   // Make the Discrete Fourier Transform
-  dft(complexI, complexI, DFT_COMPLEX_OUTPUT);        // this way the result may fit in the source matrix
+  // Se calcula la Transformada de Fourier Discreta (DFT en inglés) a través de DFT
+  dft(complexI, complexI, DFT_COMPLEX_OUTPUT);  // this way the result may fit in the source matrix
   return complexI;
 }
 
@@ -58,17 +56,18 @@ Mat fftShift(const Mat & magI)
   int cx = magI_copy.cols / 2;
   int cy = magI_copy.rows / 2;
 
+  // Reordena los cuadrantes
   Mat q0(magI_copy, Rect(0, 0, cx, cy));     // Top-Left - Create a ROI per quadrant
   Mat q1(magI_copy, Rect(cx, 0, cx, cy));    // Top-Right
   Mat q2(magI_copy, Rect(0, cy, cx, cy));    // Bottom-Left
   Mat q3(magI_copy, Rect(cx, cy, cx, cy));   // Bottom-Right
 
-  Mat tmp;                             // swap quadrants (Top-Left with Bottom-Right)
+  Mat tmp;                                   // swap quadrants (Top-Left with Bottom-Right)
   q0.copyTo(tmp);
   q3.copyTo(q0);
   tmp.copyTo(q3);
 
-  q1.copyTo(tmp);                      // swap quadrant (Top-Right with Bottom-Left)
+  q1.copyTo(tmp);                            // swap quadrant (Top-Right with Bottom-Left)
   q2.copyTo(q1);
   tmp.copyTo(q2);
 
@@ -81,14 +80,20 @@ Mat spectrum(const Mat & complexI)
 {
   Mat complexImg = complexI.clone();
   // Shift quadrants
+  // Se reordenan los cuadrantes
   Mat shift_complex = fftShift(complexImg);
 
   // Transform the real and complex values to magnitude
   // compute the magnitude and switch to logarithmic scale
   // => log(1 + sqrt(Re(DFT(I))^2 + Im(DFT(I))^2))
+  // Un número complejo tiene una parte real (Re) y una compleja (imaginaria - Im).
+  // Los resultados de una DFT son números complejos. La magnitud de una DFT es:
+  // M = [[Re(DFT(I))^2]+[Im(DFT(I))^2]]^1/2
   Mat planes_spectrum[2];
-  split(shift_complex, planes_spectrum);         // planes_spectrum[0] = Re(DFT(I)), planes_spectrum[1] = Im(DFT(I))
-  magnitude(planes_spectrum[0], planes_spectrum[1], planes_spectrum[0]);  // planes_spectrum[0] = magnitude
+  split(shift_complex, planes_spectrum);         
+  // planes_spectrum[0] = Re(DFT(I)), planes_spectrum[1] = Im(DFT(I))
+  magnitude(planes_spectrum[0], planes_spectrum[1], planes_spectrum[0]);  
+  // planes_spectrum[0] = magnitude
   Mat spectrum = planes_spectrum[0];
 
   // Switch to a logarithmic scale
@@ -111,16 +116,26 @@ int main(int argc, char ** argv)
     return EXIT_FAILURE;
   }
 
+  // Read image I
   // Compute the Discrete fourier transform
+  // Se calcula la transformada de Fourier
   Mat complexImg = computeDFT(I);
 
   // Get the spectrum
+  // Se obtiene el espectro de la DFT
   Mat spectrum_original = spectrum(complexImg);
 
   // Crop and rearrange
-  Mat shift_complex = fftShift(complexImg);   // Rearrange quadrants - Spectrum with low values at center - Theory mode
+  // Se reordenan los cuadrantes para poner las bajas
+  // frecuencias en el centro antes de procesar la DFT
+  Mat shift_complex = fftShift(complexImg);   // Rearrange quadrants - Spectrum with low 
+                                              // values at center - Theory mode
+
   // doSomethingWithTheSpectrum(shift_complex);
-  Mat rearrange = fftShift(shift_complex);   // Rearrange quadrants - Spectrum with low values at corners - OpenCV mode
+  // Se reordenan los cuadrantes para poner las bajas frecuencias 
+  // en las esquinas que es como OpenCV lo procesa
+  Mat rearrange = fftShift(shift_complex);    // Rearrange quadrants - Spectrum with low 
+                                              // values at corners - OpenCV mode
 
   // Get the spectrum after the processing
   Mat spectrum_filter = spectrum(rearrange);
@@ -132,6 +147,8 @@ int main(int argc, char ** argv)
   imshow("Spectrum filter", spectrum_filter);
 
   // Calculating the idft
+  // Para calcular la inversa de la transformada, utilizamos la función idft 
+  // aplicada a los valores complejos obtenidos con computeDFT
   Mat inverseTransform;
   idft(rearrange, inverseTransform, cv::DFT_INVERSE | cv::DFT_REAL_OUTPUT);
   normalize(inverseTransform, inverseTransform, 0, 1, NORM_MINMAX);
