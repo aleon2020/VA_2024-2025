@@ -1,8 +1,3 @@
-/**
- * Resize - sample code
- * @author José Miguel Guerrero
- */
-
 #include "opencv2/imgproc.hpp"
 #include "opencv2/highgui.hpp"
 #include <iostream>
@@ -28,14 +23,19 @@ int main(int argc, char ** argv)
   imshow("Original image", src);
 
   // Resize
+  // INTER_NEAREST. Es una interpolación del vecino cercano
+  // INTER_LINEAR. Interpolación bilineal
+  // INTER_CUBIC. Interpolación bicúbica (área de 4x4 píxeles)
   Mat resize_dst;
   int size_col = 10, size_row = 10;
+  // Aumento de una imagen utilizando la interpolación por vecinos cercanos
   resize(src, resize_dst, cv::Size(), size_col, size_row, INTER_NEAREST);
   imshow("Resize x10", resize_dst);
 
   // Resampling
   Mat resize_dst2;
   int res = 5;
+  // Reducción de una imagen utilizando la interpolación bicúbica
   resize(resize_dst, resize_dst2, Size(resize_dst.cols / res, resize_dst.rows / res), INTER_CUBIC);
   imshow("Resize /5", resize_dst2);
 
