@@ -15,6 +15,8 @@ using namespace cv;
 int main(int argc, char ** argv)
 {
   // Load the base image (src_base) and the other two test images:
+  // Se cargan la imagen de referencia (src_base) y las 
+  // otras dos imágenes que serán de test, para comparar
   Mat src_base = imread("../../data/Histogram_Comparison_Source_0.jpg", IMREAD_COLOR);
   Mat src_test1 = imread("../../data/Histogram_Comparison_Source_1.jpg", IMREAD_COLOR);
   Mat src_test2 = imread("../../data/Histogram_Comparison_Source_2.jpg", IMREAD_COLOR);
@@ -24,6 +26,7 @@ int main(int argc, char ** argv)
   }
 
   // Convert them to HSV format
+  // Se convierte a formato HSV
   Mat hsv_base, hsv_test1, hsv_test2;
   cvtColor(src_base, hsv_base, COLOR_BGR2HSV);
   cvtColor(src_test1, hsv_test1, COLOR_BGR2HSV);
@@ -34,11 +37,14 @@ int main(int argc, char ** argv)
   imshow("im3", hsv_test2);
 
   // Also, create an image of half the base image (in HSV format):
+  // Se crea una nueva imagen que es la mitad de la imagen de referencia
   Mat hsv_half_down = hsv_base(Range(hsv_base.rows / 2, hsv_base.rows), Range(0, hsv_base.cols) );
   imshow("half", hsv_half_down);
 
 
   // Initialize the arguments to calculate the histograms (bins, ranges and channels H and S )
+  // Se inicializan los argumentos para calcular los histogramas
+  // (divisiones, rangos y canales H y S)
   int h_bins = 50, s_bins = 60;
   int histSize[] = {h_bins, s_bins};
   // hue varies from 0 to 179, saturation from 0 to 255
@@ -49,6 +55,7 @@ int main(int argc, char ** argv)
   int channels[] = {0, 1};
 
   // Calculate the Histograms for the base image, the 2 test images and the half-down base image:
+  // Se calculan los histogramas de la imagen base, las dos imágenes de test y la imagen recortada
   Mat hist_base, hist_half_down, hist_test1, hist_test2;
   calcHist(&hsv_base, 1, channels, Mat(), hist_base, 2, histSize, ranges, true, false);
   normalize(hist_base, hist_base, 0, 1, NORM_MINMAX, -1, Mat() );
@@ -60,6 +67,8 @@ int main(int argc, char ** argv)
   normalize(hist_test2, hist_test2, 0, 1, NORM_MINMAX, -1, Mat() );
 
   // Apply sequentially the 4 comparison methods between the histogram of the base image (hist_base) and the other histograms:
+  // Se aplican secuencialmente los 4 métodos de comparación entre 
+  // los histogramas de la imagen base (base_image) y los demás histogramas
   for (int compare_method = 0; compare_method < 4; compare_method++) {
     double base_base = compareHist(hist_base, hist_base, compare_method);
     double base_half = compareHist(hist_base, hist_half_down, compare_method);

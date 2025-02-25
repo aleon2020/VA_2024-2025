@@ -23,17 +23,22 @@ int main(int argc, char ** argv)
   }
 
   // Split BGR planes
+  // Se separan los tres planos de la imagen a color
   vector<Mat> bgr_planes;
   split(src, bgr_planes);
 
   // Establish the number of bins
+  // Se establece el número de divisiones (bins),
+  // el cual estará en el intervalo [0, 255]
   int histSize = 256;
   // Set the ranges ( for B,G,R) )
   float range[] = {0, 256};       //the upper boundary is exclusive
   const float * histRange = {range};
+  // Indica si los bins tienen el mismo tamaño (uniform)
   bool uniform = true, accumulate = false;
 
   // Compute the histograms for each channel
+  // Se calculan los histogramas con la función calcHist
   Mat b_hist, g_hist, r_hist;
   calcHist(&bgr_planes[0], 1, 0, Mat(), b_hist, 1, &histSize, &histRange, uniform, accumulate);
   calcHist(&bgr_planes[1], 1, 0, Mat(), g_hist, 1, &histSize, &histRange, uniform, accumulate);
@@ -46,11 +51,13 @@ int main(int argc, char ** argv)
   Mat histImage(hist_h, hist_w, CV_8UC3, Scalar(0, 0, 0) );
 
   // normalize the histograms between 0 and histImage.rows
+  // Se normalizan los histogramas entre 0 y el número de filas del histograma calculado
   normalize(b_hist, b_hist, 0, histImage.rows, NORM_MINMAX, -1, Mat() );
   normalize(g_hist, g_hist, 0, histImage.rows, NORM_MINMAX, -1, Mat() );
   normalize(r_hist, r_hist, 0, histImage.rows, NORM_MINMAX, -1, Mat() );
 
   // Draw the intensity line for histograms
+  // Pintamos una línea por cada histograma
   for (int i = 1; i < histSize; i++) {
     line(
       histImage, Point(bin_w * (i - 1), hist_h - cvRound(b_hist.at<float>(i - 1)) ),
@@ -71,10 +78,15 @@ int main(int argc, char ** argv)
   imshow("calcHist Source", histImage);
 
   // Equalization
+  // Para ecualizar un canal, se utiliza la función equalizeHist
+  // la cual recibe el canal en cuestión, no el histograma
   Mat b_eqhist, g_eqhist, r_eqhist;
   equalizeHist(bgr_planes[0], b_eqhist);
   equalizeHist(bgr_planes[1], g_eqhist);
   equalizeHist(bgr_planes[2], r_eqhist);
+
+  // Si se quiere visualizar el histograma ecualizado,
+  // se realiza como en el caso anterior
 
   // Compute the histograms for each channel
   Mat b_histeq, g_histeq, r_histeq;
@@ -105,6 +117,8 @@ int main(int argc, char ** argv)
   }
 
   // Create Equalized image
+  // Para ver la imagen ecualizada, se compone la misma a
+  // partir de los tres canales resultantes de la ecualización
   vector<Mat> equalized;
   equalized.push_back(b_eqhist);
   equalized.push_back(g_eqhist);
@@ -114,6 +128,7 @@ int main(int argc, char ** argv)
   merge(equalized, equalized_image);
 
   // Show images
+  // Se muestra la imagen ecualizada y su histograma
   imshow("Equalized image", equalized_image);
   imshow("calcHist Equalized", histImageEq);
   waitKey();
