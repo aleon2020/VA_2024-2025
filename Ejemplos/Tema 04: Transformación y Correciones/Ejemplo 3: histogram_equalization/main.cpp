@@ -1,10 +1,3 @@
-/**
- * Histogram equalization - sample code
- * @author José Miguel Guerrero
- *
- * https://docs.opencv.org/3.4/d8/dbc/tutorial_histogram_calculation.html
- */
-
 #include "opencv2/highgui.hpp"
 #include "opencv2/imgcodecs.hpp"
 #include "opencv2/imgproc.hpp"

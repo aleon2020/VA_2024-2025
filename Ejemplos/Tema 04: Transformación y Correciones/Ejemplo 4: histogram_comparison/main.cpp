@@ -1,10 +1,3 @@
-/**
- * Histogram comparison - sample code
- * @author José Miguel Guerrero
- *
- * https://docs.opencv.org/3.4/d8/dc8/tutorial_histogram_comparison.html
- */
-
 #include "opencv2/imgcodecs.hpp"
 #include "opencv2/highgui.hpp"
 #include "opencv2/imgproc.hpp"
