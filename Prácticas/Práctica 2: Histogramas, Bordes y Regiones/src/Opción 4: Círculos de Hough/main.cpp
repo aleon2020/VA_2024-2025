@@ -1,58 +1,58 @@
 #include "opencv2/imgcodecs.hpp"
 #include "opencv2/highgui.hpp"
 #include "opencv2/imgproc.hpp"
-using namespace cv;
-using namespace std;
 
-int main(int argc, char **argv)
+int 
+main(int argc, char **argv)
 {
-    const char *filename = argc >= 2 ? argv[1] : "smarties.png";
+    const char *filename = argc >= 2 ? argv[1] : "balls.jpg";
     
     // Load an image
-    Mat src = imread(samples::findFile(filename), IMREAD_COLOR);
+    cv::Mat src = imread(cv::samples::findFile(filename), cv::IMREAD_COLOR);
     
+    // Check if image is loaded fine
     if (src.empty()) {
         printf("Error opening image\n");
         return EXIT_FAILURE;
     }
 
-    Mat hsv, mask, pinkOnly, gray;
+    cv::Mat hsv, mask, pinkOnly, gray;
     
     // Convert to HSV color space
-    cvtColor(src, hsv, COLOR_BGR2HSV);
+    cv::cvtColor(src, hsv, cv::COLOR_BGR2HSV);
     
     // Define range for pink color and create mask
-    Scalar lower_pink = Scalar(140, 50, 50);
-    Scalar upper_pink = Scalar(170, 255, 255);
-    inRange(hsv, lower_pink, upper_pink, mask);
+    cv::Scalar lower_pink = cv::Scalar(140, 50, 50);
+    cv::Scalar upper_pink = cv::Scalar(170, 255, 255);
+    cv::inRange(hsv, lower_pink, upper_pink, mask);
     
     // Extract only pink areas
-    bitwise_and(src, src, pinkOnly, mask);
+    cv::bitwise_and(src, src, pinkOnly, mask);
     
     // Convert to grayscale and blur for Hough Transform
-    cvtColor(pinkOnly, gray, COLOR_BGR2GRAY);
-    medianBlur(gray, gray, 5);
+    cv::cvtColor(pinkOnly, gray, cv::COLOR_BGR2GRAY);
+    cv::medianBlur(gray, gray, 5);
     
     // Detect circles using Hough Transform
-    vector<Vec3f> circles;
+    std::vector<cv::Vec3f> circles;
     HoughCircles(
-        gray, circles, HOUGH_GRADIENT, 1, gray.rows / 16,
-        100, 30, 1, 100);
+        gray, circles, cv::HOUGH_GRADIENT, 1,
+        gray.rows / 16,                 // change this value to detect circles with different distances to each other
+        100, 30, 1, 30                  // change the last two parameters (min_radius & max_radius) to detect larger circles
+    );
     
     for (size_t i = 0; i < circles.size(); i++) {
-        Vec3i c = circles[i];
-        Point center = Point(c[0], c[1]);
+        cv::Vec3i c = circles[i];
+        cv::Point center = cv::Point(c[0], c[1]);
+        // circle center
+        cv::circle(src, center, 1, cv::Scalar(0, 255, 255), 3, cv::LINE_AA);
+        // circle outline
         int radius = c[2];
-        
-        // Draw center in yellow
-        circle(src, center, 3, Scalar(0, 255, 255), -1, LINE_AA);
-        
-        // Draw circle outline in blue
-        circle(src, center, radius, Scalar(255, 0, 0), 3, LINE_AA);
+        cv::circle(src, center, radius, cv::Scalar(255, 0, 0), 3, cv::LINE_AA);
     }
     
-    // Show result
-    imshow("OPTION 4", src);
-    waitKey();
+    // Show image and circles
+    cv::imshow("OPTION 4", src);
+    cv::waitKey();
     return EXIT_SUCCESS;
 }
