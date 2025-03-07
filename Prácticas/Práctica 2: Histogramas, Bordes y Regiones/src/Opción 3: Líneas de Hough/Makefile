@@ -1,5 +1,5 @@
 CC = "g++"
-PROJECT = hough_lines
+PROJECT = option3
 
 SRC = main.cpp
 

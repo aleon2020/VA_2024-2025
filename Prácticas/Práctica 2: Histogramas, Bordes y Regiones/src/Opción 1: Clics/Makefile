@@ -1,5 +1,5 @@
 CC = "g++"
-PROJECT = read_image
+PROJECT = option1
 
 SRC = main.cpp
 

@@ -1,5 +1,5 @@
 CC = "g++"
-PROJECT = hough_circles
+PROJECT = option4
 
 SRC = main.cpp
 

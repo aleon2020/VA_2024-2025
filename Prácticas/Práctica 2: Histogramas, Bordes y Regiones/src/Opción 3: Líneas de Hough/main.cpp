@@ -6,8 +6,10 @@
 cv::Mat src, dst, colorSrc;
 int accumulatorThreshold = 200;
 
+// drawHoughLines() function
+// Calculate the linear Hough transform
 void 
-onTrackbar(int, void*) 
+drawHoughLines(int, void*) 
 {
     cv::Mat cdst;
 
@@ -36,7 +38,8 @@ onTrackbar(int, void*)
     
     // Write text in an image 
     std::string text = "N: " + std::to_string(lines.size());
-    cv::putText(colorSrc, text, cv::Point(10, 20), cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(0, 0, 255));
+    cv::putText(colorSrc, text, cv::Point(10, 20), 
+            cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(0, 0, 255));
     
     // Show results
     cv::imshow("OPTION 3", colorSrc);
@@ -60,8 +63,8 @@ main(int argc, char **argv)
     
     // Show results
     cv::namedWindow("OPTION 3");
-    cv::createTrackbar("Hough accumulator [0-255]", "OPTION 3", &accumulatorThreshold, 255, onTrackbar);
-    onTrackbar(0, 0);
+    cv::createTrackbar("Hough accumulator [0-255]", "OPTION 3", &accumulatorThreshold, 255, drawHoughLines);
+    drawHoughLines(0, 0);
     
     // Wait and Exit
     cv::waitKey();

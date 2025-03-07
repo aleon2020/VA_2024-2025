@@ -1,5 +1,5 @@
 CC = "g++"
-PROJECT = contours
+PROJECT = option5
 
 SRC = main.cpp
 

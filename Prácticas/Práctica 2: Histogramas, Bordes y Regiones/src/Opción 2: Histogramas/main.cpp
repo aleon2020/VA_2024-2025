@@ -3,13 +3,13 @@
 #include "opencv2/imgproc.hpp"
 #include <iostream>
 
-// Draw the intensity line for histograms
-// We draw a line for each histogram
+// drawHistogram() function
+// Draw the intensity line for histograms and a line for each histogram
 void 
 drawHistogram(cv::Mat& histImage, cv::Mat hist, cv::Scalar color, int histSize, int bin_w, float alpha = 1.0) 
 {
     for (int i = 1; i < histSize; i++) {
-        line(
+        cv::line(
             histImage, cv::Point(bin_w * (i - 1), histImage.rows - cvRound(hist.at<float>(i - 1) * alpha)),
             cv::Point(bin_w * i, histImage.rows - cvRound(hist.at<float>(i) * alpha)),
             color, 2, 8, 0
@@ -17,14 +17,16 @@ drawHistogram(cv::Mat& histImage, cv::Mat hist, cv::Scalar color, int histSize, 
     }
 }
 
+// main() function
+// Main function of the program
 int 
 main(int argc, char **argv) 
 {
     // Read image
-    cv::CommandLineParser parser(argc, argv, "{@input | well_exposed.jpg | input image}");
+    cv::CommandLineParser parser(argc, argv, "{@input | output_image.jpg | input image}");
     cv::Mat src = imread(cv::samples::findFile(parser.get<cv::String>("@input")), cv::IMREAD_COLOR);
     if (src.empty()) {
-        return EXIT_FAILURE;
+        return -1;
     }
 
     // Split BGR planes
@@ -95,15 +97,19 @@ main(int argc, char **argv)
     double corrR = cv::compareHist(r_hist, r_histeq, cv::HISTCMP_CORREL);
 
     // Write text in an image 
-    cv::putText(histImage, "CompB: " + std::to_string(corrB), cv::Point(10, 20), cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(255, 0, 0));
-    cv::putText(histImage, "CompG: " + std::to_string(corrG), cv::Point(10, 40), cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(0, 255, 0));
-    cv::putText(histImage, "CompR: " + std::to_string(corrR), cv::Point(10, 60), cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(0, 0, 255));
+    cv::putText(histImage, "CompB: " + std::to_string(corrB), cv::Point(10, 20), 
+            cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(255, 0, 0));
+    cv::putText(histImage, "CompG: " + std::to_string(corrG), cv::Point(10, 40), 
+            cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(0, 255, 0));
+    cv::putText(histImage, "CompR: " + std::to_string(corrR), cv::Point(10, 60), 
+            cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(0, 0, 255));
 
     double mean_intensity = mean(src)[0];
     std::string exposure = (mean_intensity < 65) ? "Underexposed" : (mean_intensity > 190) ? "Overexposed" : "Well exposed";
     
     // Write text in an image 
-    cv::putText(histImage, exposure, cv::Point(10, 80), cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(0, 255, 255));
+    cv::putText(histImage, exposure, cv::Point(10, 80), 
+            cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(0, 255, 255));
 
     // Create Equalized image
     // To see the equalized image, it is composed from the
@@ -120,6 +126,5 @@ main(int argc, char **argv)
     cv::imshow("OPTION 2", histImage);
 
     cv::waitKey();
-    return EXIT_SUCCESS;
+    return 0;
 }
-

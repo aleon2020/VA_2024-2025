@@ -2,6 +2,8 @@
 #include "opencv2/highgui.hpp"
 #include "opencv2/imgproc.hpp"
 
+// main() function
+// Main function of the program
 int 
 main(int argc, char **argv)
 {
@@ -13,7 +15,7 @@ main(int argc, char **argv)
     // Check if image is loaded fine
     if (src.empty()) {
         printf("Error opening image\n");
-        return EXIT_FAILURE;
+        return -1;
     }
 
     cv::Mat hsv, mask, pinkOnly, gray;
@@ -35,7 +37,7 @@ main(int argc, char **argv)
     
     // Detect circles using Hough Transform
     std::vector<cv::Vec3f> circles;
-    HoughCircles(
+    cv::HoughCircles(
         gray, circles, cv::HOUGH_GRADIENT, 1,
         gray.rows / 16,                 // change this value to detect circles with different distances to each other
         100, 30, 1, 30                  // change the last two parameters (min_radius & max_radius) to detect larger circles
@@ -54,5 +56,5 @@ main(int argc, char **argv)
     // Show image and circles
     cv::imshow("OPTION 4", src);
     cv::waitKey();
-    return EXIT_SUCCESS;
+    return 0;
 }

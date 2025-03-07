@@ -5,8 +5,10 @@
 cv::Mat image;
 int areaThreshold = 1000;
 
+// drawRectangleContours() function
+// Displays the outlines of rectangles and their number of pixels
 void 
-on_trackbar(int, void*) 
+drawRectangleContours(int, void*)
 {
     // Create image variables
     cv::Mat gray, edges, gauss, result;
@@ -49,7 +51,8 @@ on_trackbar(int, void*)
                     int cx = (int)(m.m10 / m.m00);
                     int cy = (int)(m.m01 / m.m00);
                     cv::circle(result, cv::Point(cx, cy), 5, color, -1);
-                    cv::putText(result, std::to_string((int)area), cv::Point(cx + 10, cy + 10), cv::FONT_HERSHEY_SIMPLEX, 0.5, color);
+                    cv::putText(result, std::to_string((int)area), cv::Point(cx + 10, cy + 10), 
+                            cv::FONT_HERSHEY_SIMPLEX, 0.5, color);
                 }
                 rectCount++;
             }
@@ -57,12 +60,15 @@ on_trackbar(int, void*)
     }
 
     // Write text in an image
-    cv::putText(result, "Rectangles: " + std::to_string(rectCount), cv::Point(10, 20), cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(0, 0, 255));
+    cv::putText(result, "Rectangles: " + std::to_string(rectCount), cv::Point(10, 20), 
+            cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(0, 0, 255));
     
     // Show results
     cv::imshow("OPTION 5", result);
 }
 
+// main() function
+// Main function of the program
 int 
 main() 
 {
@@ -77,8 +83,8 @@ main()
 
     // Show results
     cv::namedWindow("OPTION 5", cv::WINDOW_AUTOSIZE);
-    cv::createTrackbar("Area [0-20k]", "OPTION 5", &areaThreshold, 20000, on_trackbar);
-    on_trackbar(0, 0);
+    cv::createTrackbar("Area [0-20k]", "OPTION 5", &areaThreshold, 20000, drawRectangleContours);
+    drawRectangleContours(0, 0);
     
     // Wait to press a key
     cv::waitKey(0);

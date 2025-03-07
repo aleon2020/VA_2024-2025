@@ -5,10 +5,11 @@ cv::Mat originalImage, transformedImage;
 std::vector<cv::Point2f> points;
 bool transformed = false;
 
+// on_mouse() function
+// Create mouse callback
 void 
-onMouse(int event, int x, int y, int, void*) 
+on_mouse(int event, int x, int y, int, void*) 
 {
-
     if (event == cv::EVENT_LBUTTONDOWN) {
 
         if (transformed) {
@@ -41,20 +42,32 @@ onMouse(int event, int x, int y, int, void*)
     }
 }
 
+// main() function
+// Main function of the program
 int 
 main() 
 {
+    // Read image
     originalImage = cv::imread("clics.jpg", cv::IMREAD_COLOR);
 
+    // Check if image is loaded fine
     if (originalImage.empty()) {
         std::cerr << "Error: No se pudo cargar la imagen." << std::endl;
         return -1;
     }
     
     transformedImage = originalImage.clone();
+
+    // Show results
     cv::namedWindow("OPTION 1");
-    cv::setMouseCallback("OPTION 1", onMouse);
+
+    // Create mouse callback
+    cv::setMouseCallback("OPTION 1", on_mouse);
+
+    // Show results
     cv::imshow("OPTION 1", transformedImage);
+
+    // Wait to press a key
     cv::waitKey(0);
     return 0;
 }
