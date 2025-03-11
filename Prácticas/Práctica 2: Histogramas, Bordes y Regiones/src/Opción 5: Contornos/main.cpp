@@ -1,14 +1,35 @@
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgproc.hpp>
 #include <iostream>
+#include <cmath>
 
 cv::Mat image;
 int areaThreshold = 1000;
 
+// isRectangle() function
+// Determine if a contour is a rectangle (not a square)
+bool 
+isRectangle(const std::vector<cv::Point>& approx) 
+{
+    if (approx.size() != 4 || !cv::isContourConvex(approx))
+        return false;
+    
+    std::vector<double> sides;
+    for (int i = 0; i < 4; i++) {
+        double side = cv::norm(approx[i] - approx[(i + 1) % 4]);
+        sides.push_back(side);
+    }
+    
+    double minSide = *std::min_element(sides.begin(), sides.end());
+    double maxSide = *std::max_element(sides.begin(), sides.end());
+    
+    return (maxSide / minSide) > 1.2;
+}
+
 // drawRectangleContours() function
 // Displays the outlines of rectangles and their number of pixels
 void 
-drawRectangleContours(int, void*)
+drawRectangleContours(int, void*) 
 {
     // Create image variables
     cv::Mat gray, edges, gauss, result;
@@ -34,9 +55,9 @@ drawRectangleContours(int, void*)
         double area = cv::contourArea(contours[i]);
         if (area > areaThreshold) {
             std::vector<cv::Point> approx;
-            cv::approxPolyDP(contours[i], approx, arcLength(contours[i], true) * 0.02, true);
+            cv::approxPolyDP(contours[i], approx, cv::arcLength(contours[i], true) * 0.02, true);
             
-            if (approx.size() == 4 && cv::isContourConvex(approx)) {
+            if (isRectangle(approx)) {
 
                 // Drawing contours
                 // iterate through all the top-level contours,
