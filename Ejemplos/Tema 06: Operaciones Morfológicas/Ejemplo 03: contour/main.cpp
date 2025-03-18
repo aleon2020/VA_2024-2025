@@ -1,8 +1,3 @@
-/**
- * Morphological contours - sample code
- * @author José Miguel Guerrero
- */
-
 #include "opencv2/imgproc.hpp"
 #include "opencv2/highgui.hpp"
 #include <iostream>

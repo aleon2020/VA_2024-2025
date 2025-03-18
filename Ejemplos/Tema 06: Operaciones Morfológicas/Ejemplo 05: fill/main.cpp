@@ -1,11 +1,3 @@
-/**
- * Flood Fill Demo - Sample Code
- * This program demonstrates the floodFill() function in OpenCV.
- *
- * @author José Miguel Guerrero
- * Based on OpenCV documentation: https://docs.opencv.org/3.4/d1/d17/samples_2cpp_2ffilldemo_8cpp-example.html
- */
-
 #include "opencv2/imgproc.hpp"
 #include "opencv2/imgcodecs.hpp"
 #include "opencv2/videoio.hpp"

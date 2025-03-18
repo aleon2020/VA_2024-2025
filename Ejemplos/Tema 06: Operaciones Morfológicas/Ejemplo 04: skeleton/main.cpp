@@ -1,8 +1,3 @@
-/**
- * Skeleton - sample code: based on Zhang-Suen thinning algorithm
- * @author José Miguel Guerrero
- */
-
 #include <opencv2/opencv.hpp>
 #include <vector>
 #include <iostream>
