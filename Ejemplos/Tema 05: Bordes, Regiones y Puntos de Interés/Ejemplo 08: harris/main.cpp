@@ -1,9 +1,3 @@
-/**
- * Harris corners detector - sample code
- * @author José Miguel Guerrero
- * https://docs.opencv.org/3.4/d4/d7d/tutorial_harris_detector.html
- */
-
 #include "opencv2/highgui.hpp"
 #include "opencv2/imgproc.hpp"
 #include <iostream>

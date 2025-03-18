@@ -1,8 +1,3 @@
-/**
- * Thresholding using Binary al Otsu - sample code
- * @author José Miguel Guerrero
- */
-
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgproc.hpp>
 
