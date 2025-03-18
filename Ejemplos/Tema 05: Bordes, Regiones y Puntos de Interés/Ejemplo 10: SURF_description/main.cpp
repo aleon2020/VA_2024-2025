@@ -1,3 +1,9 @@
+/**
+ * SURF detector sample code - Feature detection
+ * @author José Miguel Guerrero
+ * https://docs.opencv.org/3.4/d5/dde/tutorial_feature_description.html
+ */
+
 #include <iostream>
 #include "opencv2/core.hpp"
 #ifdef HAVE_OPENCV_XFEATURES2D

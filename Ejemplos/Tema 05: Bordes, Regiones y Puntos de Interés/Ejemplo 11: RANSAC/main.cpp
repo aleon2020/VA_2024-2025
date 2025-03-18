@@ -1,3 +1,9 @@
+/**
+ * RANSAC example aligning images
+ * Based on https://github.com/spmallick/learnopencv/tree/master/ImageAlignment-FeatureBased
+ * @author José Miguel Guerrero
+ */
+
 #include <opencv2/opencv.hpp>
 #include "opencv2/features2d.hpp"
 
