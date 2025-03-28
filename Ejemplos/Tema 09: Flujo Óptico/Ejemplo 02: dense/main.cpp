@@ -1,18 +1,3 @@
-/**
- * Optical flow using Gunner Farneback's algorithm demo sample
- * @author José Miguel Guerrero
- *
- * https://docs.opencv.org/3.4/d4/dee/tutorial_optical_flow.html
- *
- * Lucas-Kanade method computes optical flow for a sparse feature set (in our example, corners detected using Shi-Tomasi algorithm).
- * OpenCV provides another algorithm to find the dense optical flow. It computes the optical flow for all the points in the frame.
- * It is based on Gunner Farneback's algorithm which is explained in "Two-Frame Motion Estimation Based on Polynomial Expansion" by Gunner Farneback in 2003.
- *
- * Below sample shows how to find the dense optical flow using above algorithm. We get a 2-channel array with optical flow vectors, (u,v).
- * We find their magnitude and direction. We color code the result for better visualization. Direction corresponds to Hue value of the image.
- * Magnitude corresponds to Value plane
- */
-
 #include <iostream>
 #include <opencv2/core.hpp>
 #include <opencv2/highgui.hpp>

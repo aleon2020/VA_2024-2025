@@ -1,16 +1,3 @@
-/**
- * Optical flow using Lucas-Kanade demo sample
- * @author José Miguel Guerrero
- *
- * https://docs.opencv.org/3.4/d4/dee/tutorial_optical_flow.html
- *
- * OpenCV provides all these in a single function, cv.calcOpticalFlowPyrLK(). Here, we create a simple application which tracks some points in a video.
- * To decide the points, we use cv.goodFeaturesToTrack(). We take the first frame, detect some Shi-Tomasi corner points in it, then we iteratively track
- * those points using Lucas-Kanade optical flow. For the function cv.calcOpticalFlowPyrLK() we pass the previous frame, previous points and next frame.
- * It returns next points along with some status numbers which has a value of 1 if next point is found, else zero. We iteratively pass these next points
- * as previous points in next step. See the code below:
- */
-
 #include <iostream>
 #include <opencv2/core.hpp>
 #include <opencv2/highgui.hpp>
