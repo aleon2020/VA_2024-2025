@@ -1,10 +1,3 @@
-/**
- * KMeans demo sample
- * @author José Miguel Guerrero
- *
- * https://github.com/opencv/opencv/blob/master/samples/cpp/kmeans.cpp
- */
-
 #include "opencv2/highgui.hpp"
 #include "opencv2/core.hpp"
 #include "opencv2/imgproc.hpp"

@@ -1,10 +1,3 @@
-/**
- * Point classification demo sample
- * @author José Miguel Guerrero
- *
- * https://github.com/opencv/opencv/blob/master/samples/cpp/points_classifier.cpp
- */
-
 #include "opencv2/core.hpp"
 #include "opencv2/imgproc.hpp"
 #include "opencv2/ml.hpp"

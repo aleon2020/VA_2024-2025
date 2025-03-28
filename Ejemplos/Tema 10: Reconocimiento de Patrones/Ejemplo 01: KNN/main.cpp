@@ -1,8 +1,3 @@
-/**
- * KNN demo sample
- * @author José Miguel Guerrero
- */
-
 #include "opencv2/core.hpp"
 #include "opencv2/imgproc.hpp"
 #include "opencv2/ml.hpp"
