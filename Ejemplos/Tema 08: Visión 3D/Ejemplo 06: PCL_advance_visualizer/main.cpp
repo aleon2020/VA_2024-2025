@@ -1,10 +1,3 @@
-/**
- * PCL visualizer advance demo sample
- * @author José Miguel Guerrero
- *
- * Based on Geoffrey Biggs
- */
-
 #include <iostream>
 #include <thread>
 

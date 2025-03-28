@@ -1,10 +1,3 @@
-/**
- * Disparity filtering demo sample
- * @author José Miguel Guerrero
- *
- * https://docs.opencv.org/master/d3/d14/tutorial_ximgproc_disparity_filtering.html
- */
-
 #include "opencv2/calib3d.hpp"
 #include "opencv2/imgproc.hpp"
 #include "opencv2/imgcodecs.hpp"

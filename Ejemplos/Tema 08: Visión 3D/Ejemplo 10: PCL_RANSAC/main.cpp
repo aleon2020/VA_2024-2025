@@ -1,8 +1,3 @@
-/**
- * PCL RANSAC demo sample
- * @author José Miguel Guerrero
- */
-
 #include <iostream>
 #include <thread>
 

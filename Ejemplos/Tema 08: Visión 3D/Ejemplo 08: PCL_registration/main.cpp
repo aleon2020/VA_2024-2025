@@ -1,10 +1,3 @@
-/**
- * PCL registration demo sample
- * @author José Miguel Guerrero
- *
- * Based on author Radu Bogdan Rusu and adaptation Raphael Favier
- */
-
 #include <pcl/memory.h>  // for pcl::make_shared
 #include <pcl/point_types.h>
 #include <pcl/point_cloud.h>
