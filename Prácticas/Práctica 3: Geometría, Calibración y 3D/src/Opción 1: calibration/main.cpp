@@ -1,134 +1,173 @@
 #include <iostream>
 #include <opencv2/opencv.hpp>
-#include <opencv2/calib3d.hpp>
-#include <opencv2/imgproc.hpp>
-#include <opencv2/highgui.hpp>
 #include <fstream>
 
-cv::Mat image, displayedImage, cameraMatrix, distCoeffs;
-bool correctionApplied = false;
-std::vector<std::vector<cv::Point2f>> chessboardPoints2D;
-std::vector<std::vector<cv::Point3f>> chessboardPoints3D;
+using namespace cv;
+using namespace std;
 
-cv::Size chessboardSize(10, 7);
-cv::Size squareSize(24, 24);
+// Configuración del tablero de ajedrez
+const Size chessboardSize(9, 6); // 10x7 cuadrados -> 9x6 esquinas internas
+const float squareSize = 24.0f;   // Tamaño de cada cuadrado en mm
 
-void detectChessboard(cv::Mat &img)
+// Variables para la calibración
+vector<vector<Point2f>> imagePoints;
+vector<vector<Point3f>> objectPoints;
+Mat cameraMatrix = Mat::eye(3, 3, CV_64F);
+Mat distCoeffs = Mat::zeros(5, 1, CV_64F);
+bool calibrated = false;
+bool showUndistorted = false;
+
+// Generar puntos 3D del tablero
+vector<Point3f> generate3DChessboardCorners()
 {
-    std::vector<cv::Point2f> corners;
-    bool found = cv::findChessboardCorners(img, chessboardSize, corners);
-    if (found)
+    vector<Point3f> corners;
+    for (int i = 0; i < chessboardSize.height; i++)
     {
-        cv::drawChessboardCorners(img, chessboardSize, corners, found);
+        for (int j = 0; j < chessboardSize.width; j++)
+        {
+            corners.push_back(Point3f(j * squareSize, i * squareSize, 0));
+        }
+    }
+    return corners;
+}
+
+// Calibrar la cámara
+void performCalibration(Size imageSize)
+{
+    vector<Mat> rvecs, tvecs;
+    int flags = CALIB_FIX_ASPECT_RATIO | CALIB_FIX_K3 | 
+                CALIB_ZERO_TANGENT_DIST | CALIB_FIX_PRINCIPAL_POINT;
+    
+    double reprojError = calibrateCamera(objectPoints, imagePoints, imageSize, 
+                                      cameraMatrix, distCoeffs, rvecs, tvecs, flags);
+    
+    cout << "Reproyection error: " << reprojError << endl;
+    cout << "Camera matrix:\n" << cameraMatrix << endl;
+    cout << "Distortion coefficients:\n" << distCoeffs << endl;
+    
+    calibrated = true;
+}
+
+// Guardar calibración en archivo
+void saveCalibration(const string& filename)
+{
+    FileStorage fs(filename, FileStorage::WRITE);
+    if (fs.isOpened())
+    {
+        fs << "camera_matrix" << cameraMatrix;
+        fs << "distortion_coefficients" << distCoeffs;
+        fs.release();
+        cout << "Calibration saved to " << filename << endl;
+    }
+    else
+    {
+        cerr << "Error: Could not open file to save calibration" << endl;
     }
 }
 
-void saveCalibration()
+// Cargar calibración desde archivo
+bool loadCalibration(const string& filename)
 {
-    cv::FileStorage file("calibration.yml", cv::FileStorage::WRITE);
-    if (!file.isOpened())
+    FileStorage fs(filename, FileStorage::READ);
+    if (fs.isOpened())
     {
-        std::cerr << "Error: No se pudo abrir el archivo para escritura." << std::endl;
-        return;
+        fs["camera_matrix"] >> cameraMatrix;
+        fs["distortion_coefficients"] >> distCoeffs;
+        fs.release();
+        calibrated = true;
+        cout << "Calibration loaded from " << filename << endl;
+        return true;
     }
-
-    file << "cameraMatrix" << cameraMatrix;
-    file << "distCoeffs" << distCoeffs;
-    file.release();
-    std::cout << "Calibración guardada correctamente." << std::endl;
-}
-
-
-void loadCalibration()
-{
-    cv::FileStorage file("calibration.yml", cv::FileStorage::READ);
-    if (!file.isOpened())
+    else
     {
-        std::cerr << "Error: No se pudo abrir el archivo de calibración." << std::endl;
-        return;
+        cerr << "Error: Could not open file to load calibration" << endl;
+        return false;
     }
-
-    file["cameraMatrix"] >> cameraMatrix;
-    file["distCoeffs"] >> distCoeffs;
-    file.release();
-    std::cout << "Calibración cargada correctamente." << std::endl;
-}
-
-void applyCorrection()
-{
-    if (!cameraMatrix.empty() && !distCoeffs.empty())
-    {
-        cv::Mat corrected;
-        cv::undistort(image, corrected, cameraMatrix, distCoeffs);
-        displayedImage = corrected;
-    }
-}
-
-void trackbarCallback(int position, void *)
-{
-    if (position == 0)
-    {
-        displayedImage = image.clone();
-    }
-    else if (position == 1)
-    {
-        detectChessboard(displayedImage);
-    }
-    else if (position == 2)
-    {
-        // Aquí se implementaría solvePnP y projectPoints para proyectar un cubo o una figura más compleja
-    }
-    cv::imshow("Chessboard Calibration", displayedImage);
 }
 
 int main()
 {
-    image = cv::imread("chessboard.jpeg");
+    // Cargar imagen
+    Mat image = imread("chessboard.jpeg");
     if (image.empty())
     {
-        std::cerr << "Error: No se pudo cargar la imagen." << std::endl;
+        cerr << "Error: Could not load image chessboard.jpeg" << endl;
         return -1;
     }
 
-    displayedImage = image.clone();
-    cv::namedWindow("Chessboard Calibration");
-    int sliderValue = 0;
-    cv::createTrackbar("Mode", "Chessboard Calibration", &sliderValue, 2, trackbarCallback);
-    trackbarCallback(0, nullptr);
+    Mat displayImage, undistortedImage;
+    image.copyTo(displayImage);
+    bool found = false;
+    vector<Point2f> corners;
+
+    namedWindow("OPTION 1", WINDOW_AUTOSIZE);
+
+    // Generar puntos 3D del tablero (solo una vez)
+    vector<Point3f> chessboard3D = generate3DChessboardCorners();
 
     while (true)
     {
-        int key = cv::waitKey(30);
-        if (key == 27) break; // ESC para salir
-        if (sliderValue == 1)
+        image.copyTo(displayImage);
+
+        // Buscar esquinas del tablero
+        found = findChessboardCorners(image, chessboardSize, corners, 
+                                    CALIB_CB_ADAPTIVE_THRESH + CALIB_CB_NORMALIZE_IMAGE);
+
+        // Si se encontraron esquinas, refinarlas y dibujarlas
+        if (found)
         {
-            if (key == 'c')
+            Mat gray;
+            cvtColor(image, gray, COLOR_BGR2GRAY);
+            cornerSubPix(gray, corners, Size(11, 11), Size(-1, -1), 
+                        TermCriteria(TermCriteria::EPS + TermCriteria::MAX_ITER, 30, 0.1));
+            
+            drawChessboardCorners(displayImage, chessboardSize, corners, found);
+        }
+
+        // Mostrar imagen original o corregida
+        if (showUndistorted && calibrated)
+        {
+            undistort(displayImage, undistortedImage, cameraMatrix, distCoeffs);
+            imshow("OPTION 1", undistortedImage);
+        }
+        else
+        {
+            imshow("OPTION 1", displayImage);
+        }
+
+        // Manejo de teclas
+        int key = waitKey(30);
+
+        if (key == 'q' || key == 27) // 'q' o ESC para salir
+        {
+            break;
+        }
+        else if (key == 'c' && found) // 'c' para calibrar
+        {
+            imagePoints.push_back(corners);
+            objectPoints.push_back(chessboard3D);
+            performCalibration(image.size());
+        }
+        else if (key == 's') // 's' para guardar calibración
+        {
+            saveCalibration("calibration.yml");
+        }
+        else if (key == 'a') // 'a' para alternar corrección
+        {
+            if (calibrated)
             {
-                std::cout << "Calibrando..." << std::endl;
-                // Implementar acumulación de puntos y calibración
+                showUndistorted = !showUndistorted;
+                cout << "Undistortion " << (showUndistorted ? "ON" : "OFF") << endl;
             }
-            else if (key == 's')
+            else
             {
-                saveCalibration();
-                std::cout << "Calibración guardada." << std::endl;
-            }
-            else if (key == 'a')
-            {
-                if (correctionApplied)
+                if (loadCalibration("calibration.yml"))
                 {
-                    displayedImage = image.clone();
-                    correctionApplied = false;
-                }
-                else
-                {
-                    loadCalibration();
-                    applyCorrection();
-                    correctionApplied = true;
+                    showUndistorted = true;
                 }
             }
-            cv::imshow("Chessboard Calibration", displayedImage);
         }
     }
+
     return 0;
 }
-
