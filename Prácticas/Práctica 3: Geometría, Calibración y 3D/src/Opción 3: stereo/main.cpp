@@ -3,6 +3,8 @@
 #include <opencv2/highgui.hpp>
 #include <iostream>
 
+// main() function
+// Main function of the program
 int main() {
     // Cargar las imágenes rectificadas en escala de grises
     cv::Mat left = cv::imread("pinkballs_1.jpeg", cv::IMREAD_GRAYSCALE);

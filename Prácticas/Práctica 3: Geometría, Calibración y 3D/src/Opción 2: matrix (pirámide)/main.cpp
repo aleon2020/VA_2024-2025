@@ -35,6 +35,8 @@ vector<Point3f> create3DPyramid(float baseSize = 96.0f, float height = -144.0f)
     return pyramid;
 }
 
+// main() function
+// Main function of the program
 int main()
 {
     // Cargar imagen
