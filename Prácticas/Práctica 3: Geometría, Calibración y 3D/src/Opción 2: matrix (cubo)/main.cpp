@@ -33,8 +33,7 @@ int
 main()
 {
     cv::Mat image = cv::imread("chessboard.jpeg");
-    if (image.empty())
-    {
+    if (image.empty()) {
         std::cerr << "Error: Could not load image chessboard.jpeg" << std::endl;
         return -1;
     }
@@ -72,7 +71,7 @@ main()
             cv::Point3f(0, 0, 50)
         };
         std::vector<cv::Point2f> axis2D;
-        projectPoints(axisPoints, rvec, tvec, cameraMatrix, distCoeffs, axis2D);
+        cv::projectPoints(axisPoints, rvec, tvec, cameraMatrix, distCoeffs, axis2D);
     } else {
         cv::putText(image, "Chessboard not found!", cv::Point(20, 40), cv::FONT_HERSHEY_SIMPLEX, 1, cv::Scalar(0, 0, 255), 2);
     }
