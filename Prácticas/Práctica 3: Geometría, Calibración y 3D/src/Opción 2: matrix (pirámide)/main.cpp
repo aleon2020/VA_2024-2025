@@ -46,12 +46,12 @@ main()
     bool found = findChessboardCorners(image, chessboardSize, corners, cv::CALIB_CB_ADAPTIVE_THRESH + cv::CALIB_CB_NORMALIZE_IMAGE);
     if (found) {
         cv::Mat gray;
-        cvtColor(image, gray, cv::COLOR_BGR2GRAY);
-        cornerSubPix(gray, corners, cv::Size(11, 11), cv::Size(-1, -1), cv::TermCriteria(cv::TermCriteria::EPS + cv::TermCriteria::MAX_ITER, 30, 0.1));
+        cv::cvtColor(image, gray, cv::COLOR_BGR2GRAY);
+        cv::cornerSubPix(gray, corners, cv::Size(11, 11), cv::Size(-1, -1), cv::TermCriteria(cv::TermCriteria::EPS + cv::TermCriteria::MAX_ITER, 30, 0.1));
         cv::Mat rvec, tvec;
-        solvePnP(chessboard3D, corners, cameraMatrix, distCoeffs, rvec, tvec);
+        cv::solvePnP(chessboard3D, corners, cameraMatrix, distCoeffs, rvec, tvec);
         std::vector<cv::Point2f> pyramid2D;
-        projectPoints(pyramid3D, rvec, tvec, cameraMatrix, distCoeffs, pyramid2D);
+        cv::projectPoints(pyramid3D, rvec, tvec, cameraMatrix, distCoeffs, pyramid2D);
         for (int i = 0; i < 4; i++) {
             cv::line(image, pyramid2D[i], pyramid2D[(i + 1) % 4], cv::Scalar(0, 0, 255), 2);
         }
