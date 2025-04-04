@@ -64,14 +64,6 @@ main()
         for (int i = 4; i < 8; i++) {
             cv::line(image, cube2D[i], cube2D[4 + (i + 1) % 4], cv::Scalar(0, 0, 255), 2);
         }
-        std::vector<cv::Point3f> axisPoints = {
-            cv::Point3f(0, 0, 0),
-            cv::Point3f(50, 0, 0),
-            cv::Point3f(0, 50, 0),
-            cv::Point3f(0, 0, 50)
-        };
-        std::vector<cv::Point2f> axis2D;
-        cv::projectPoints(axisPoints, rvec, tvec, cameraMatrix, distCoeffs, axis2D);
     } else {
         cv::putText(image, "Chessboard not found!", cv::Point(20, 40), cv::FONT_HERSHEY_SIMPLEX, 1, cv::Scalar(0, 0, 255), 2);
     }
