@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>practica3-grupo1</name>
+  <version>1.0.0</version>
+  <description>This packages contains the third exercise of the computer vision subject!</description>
+  <maintainer email="josemiguel.guerrero@urjc.es">Jose Miguel Guerrero Hernandez</maintainer>
+  <maintainer email="a.leon.2020@alumnos.urjc.es">Alberto León Luengo</maintainer>
+  <maintainer email="d.garciac.2021@alumnos.urjc.es">Jose Miguel Guerrero Hernandez</maintainer>
+  <license>MIT License</license>
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+
+  <depend>cv_bridge</depend>
+  <depend>depth_image_proc</depend>
+  <depend>eigen</depend>
+  <depend>geometry_msgs</depend>
+  <depend>image_geometry</depend>
+  <depend>image_transport</depend>
+  <depend>libopencv-dev</depend>
+  <depend>libpcl-all-dev</depend>
+  <depend>message_filters</depend>
+  <depend>pcl_ros</depend>
+  <depend>rclcpp</depend>
+  <depend>sensor_msgs</depend>
+  <depend>std_msgs</depend>
+  <depend>tf2_geometry_msgs</depend>
+  <depend>tf2_ros</depend>
+
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>
