@@ -22,7 +22,7 @@ git pull
 
 ## 1. Resumen de los contenidos de teoría
 
-Fichero ['Resumen Teoría VA.pdf'](https://docs.google.com/document/d/1hYNsSnOXKjE1kXjycNTTrv47CnXmMRywsS0rjo0Pqxc/edit?usp=sharing): Resumen de teoría en formato PDF.
+Fichero ['Resumen Teoría VA.pdf'](https://github.com/aleon2020/VA_2024-2025/blob/main/Resumen%20Teor%C3%ADa%20VA.pdf): Resumen de teoría en formato PDF.
 
 IMPORTANTE: Para hacer uso del índice interactivo que viene implementado en el resumen, debes descargar el documento en formato PDF.
 
