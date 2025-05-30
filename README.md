@@ -36,4 +36,4 @@ Directorio ['Prácticas'](https://github.com/aleon2020/VA_2024-2025/tree/main/Pr
 
 ## 4. Exámenes
 
-Directorio ['Examen Final'](): Dentro de este directorio se encuentra el examen de la Convocatoria Ordinaria del curso 2024-2025.
+Directorio ['Examen Final'](https://github.com/aleon2020/VA_2024-2025/tree/main/Examen%20Final): Dentro de este directorio se encuentra el examen de la Convocatoria Ordinaria del curso 2024-2025.
