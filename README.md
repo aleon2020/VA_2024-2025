@@ -32,4 +32,8 @@ Directorio ['Diapositivas Teoría'](https://github.com/aleon2020/VA_2024-2025/tr
 
 ## 3. Prácticas
 
-Directorios ['Prácticas'](https://github.com/aleon2020/VA_2024-2025/tree/main/Pr%C3%A1cticas): Este directorio contiene cada una de las prácticas realizadas en la asignatura.
+Directorio ['Prácticas'](https://github.com/aleon2020/VA_2024-2025/tree/main/Pr%C3%A1cticas): Este directorio contiene cada una de las prácticas realizadas en la asignatura.
+
+## 4. Exámenes
+
+Directorio ['Examen Convocatoria Ordinaria'](): Dentro de este directorio se encuentra el examen de la Convocatoria Ordinaria del curso 2024-2025.
